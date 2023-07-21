@@ -29,44 +29,35 @@ def obtener_dieta():
     return response.json()["meals"][0]
 
 def pedir_datos_personales():
-    print("¡Bienvenido/a a la calculadora de IMC y planificador de ejercicios y dieta!")
-
-    # Pedir datos personales al usuario
+    print("Bienvenido a la calculadora de IMC y planificador de ejercicios y dieta!")
     edad = int(input("Ingresa tu edad: "))
     peso = float(input("Ingresa tu peso en kg: "))
     altura = float(input("Ingresa tu altura en metros: "))
     genero = input("Ingresa tu género (hombre/mujer): ").lower()
-
     return edad, peso, altura, genero
 
 def main():
     edad, peso, altura, genero = pedir_datos_personales()
 
-    # Calcular el IMC y el estado de salud
     imc = calcular_imc(peso, altura)
     estado = estado_salud(imc)
 
     print(f"\nTu IMC es: {imc:.2f}")
     print(f"Según el IMC, tienes {estado}.")
 
-    # Calcular rango de peso normal
     peso_minimo, peso_maximo = calcular_rango_peso_normal(altura)
     print(f"Tu peso debería estar entre {peso_minimo:.2f} kg y {peso_maximo:.2f} kg para alcanzar un peso normal.")
 
-    # Pedir los días de la semana en los que se puede entrenar
     dias_entrenamiento = input("\n¿Qué días de la semana puedes entrenar? (lunes, martes, miércoles, jueves, viernes, sábado, domingo) ").split(',')
     dias_entrenamiento = [dia.strip().capitalize() for dia in dias_entrenamiento]
 
-    # Obtener ejercicios y dieta desde las APIs
     ejercicios = obtener_ejercicios()
     dieta = obtener_dieta()
 
-    # Generar la tabla de ejercicios para los días seleccionados
     tabla_ejercicios = {}
     for dia in dias_entrenamiento:
         tabla_ejercicios[dia] = [ejercicio["name"] for ejercicio in ejercicios if dia.lower() in ejercicio["name"].lower()]
 
-    # Mostrar la tabla de ejercicios
     print("\n¡Felicidades! A continuación, te presentamos una tabla de ejercicios:")
     for dia, ejercicios in tabla_ejercicios.items():
         print(f"\n{dia}:")
@@ -76,7 +67,6 @@ def main():
         else:
             print("- Descanso")
 
-    # Mostrar la tabla de dieta
     print("\nA continuación, te presentamos una tabla de dieta:")
     print(f"\nNombre: {dieta['strMeal']}")
     print("Ingredientes:")
